@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sociedade dos Fundamentos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --cream: #ede7d9;
+    --ochre: #c4883a;
+    --ochre-light: #d9a55a;
+    --rust: #8b3a1e;
+    --sage: #5c6b4a;
+    --charcoal: #2d2926;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: var(--charcoal);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 80px 24px;
+  }
+
+  .hero-texture {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(ellipse at 20% 50%, rgba(196,136,58,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(139,58,30,0.10) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  .hero-border {
+    position: absolute;
+    inset: 20px;
+    border: 1px solid rgba(196,136,58,0.25);
+    pointer-events: none;
+  }
+  .hero-border::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(196,136,58,0.10);
+  }
+
+  /* corner ornaments */
+  .corner {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-color: var(--ochre);
+    border-style: solid;
+    opacity: 0.6;
+  }
+  .corner-tl { top: 20px; left: 20px; border-width: 2px 0 0 2px; }
+  .corner-tr { top: 20px; right: 20px; border-width: 2px 2px 0 0; }
+  .corner-bl { bottom: 20px; left: 20px; border-width: 0 0 2px 2px; }
+  .corner-br { bottom: 20px; right: 20px; border-width: 0 2px 2px 0; }
+
+  .hero-content {
+    position: relative;
+    text-align: center;
+    max-width: 780px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 9vw, 96px);
+    font-weight: 900;
+    line-height: 0.92;
+    color: var(--paper);
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.4s;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--ochre-light);
+  }
+
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-style: italic;
+    color: rgba(245,240,232,0.55);
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.6s;
+  }
+
+  .hero-cta {
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.8s;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--ochre);
+    color: var(--charcoal);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 20px 56px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(196,136,58,0.35); }
+
+  .hero-price-note {
+    margin-top: 20px;
+    font-size: 13px;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.5px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 40px;
+    margin: 72px auto;
+    max-width: 600px;
+  }
+  .divider-line { flex: 1; height: 1px; background: rgba(196,136,58,0.3); }
+  .divider-icon {
+    color: var(--ochre);
+    font-size: 20px;
+    opacity: 0.7;
+  }
+
+  /* SECTIONS */
+  section { padding: 80px 24px; }
+
+  .container { max-width: 860px; margin: 0 auto; }
+  .container-wide { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--charcoal);
+    margin-bottom: 24px;
+  }
+
+  .section-title em { font-style: italic; color: var(--ochre); }
+
+  .section-body {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #4a4440;
+  }
+
+  /* PROBLEM */
+  .problem-section {
+    background: var(--cream);
+  }
+
+  .problem-list {
+    list-style: none;
+    margin-top: 40px;
+    display: grid;
+    gap: 16px;
+  }
+
+  .problem-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #4a4440;
+    padding: 20px 24px;
+    background: var(--paper);
+    border-left: 3px solid var(--rust);
+  }
+
+  .problem-list li::before {
+    content: '—';
+    color: var(--rust);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* SOLUTION / WHAT IS */
+  .what-is {
+    background: var(--charcoal);
+    color: var(--paper);
+  }
+
+  .what-is .section-title { color: var(--paper); }
+  .what-is .section-body { color: rgba(245,240,232,0.7); }
+
+  .highlight-box {
+    margin-top: 48px;
+    border: 1px solid rgba(196,136,58,0.3);
+    padding: 40px;
+    position: relative;
+  }
+  .highlight-box::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 120px;
+    color: var(--ochre);
+    opacity: 0.15;
+    position: absolute;
+    top: -20px;
+    left: 24px;
+    line-height: 1;
+  }
+
+  .highlight-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3vw, 28px);
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--paper);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* MODULES / WHAT'S INCLUDED */
+  .includes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    margin-top: 56px;
+    background: rgba(196,136,58,0.15);
+  }
+
+  .include-card {
+    background: var(--paper);
+    padding: 36px 32px;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .include-card:hover { background: var(--cream); }
+
+  .include-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--ochre);
+    opacity: 0.2;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .include-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 10px;
+  }
+
+  .include-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #6a6460;
+  }
+
+  .include-tag {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ochre);
+    border: 1px solid var(--ochre);
+    padding: 4px 10px;
+  }
+
+  /* FOR WHO */
+  .for-who {
+    background: var(--cream);
+  }
+
+  .who-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  @media (max-width: 600px) { .who-grid { grid-template-columns: 1fr; } }
+
+  .who-card {
+    padding: 32px;
+  }
+
+  .who-card.yes { border-left: 4px solid var(--sage); }
+  .who-card.no { border-left: 4px solid var(--rust); }
+
+  .who-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .who-card.yes .who-label { color: var(--sage); }
+  .who-card.no .who-label { color: var(--rust); }
+
+  .who-list { list-style: none; display: grid; gap: 12px; }
+  .who-list li {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #4a4440;
+    padding-left: 20px;
+    position: relative;
+  }
+  .who-card.yes .who-list li::before { content: '✓'; position: absolute; left: 0; color: var(--sage); font-weight: 700; }
+  .who-card.no .who-list li::before { content: '✗'; position: absolute; left: 0; color: var(--rust); font-weight: 700; }
+
+  /* PRICE */
+  .price-section {
+    background: var(--charcoal);
+    text-align: center;
+  }
+
+  .price-section .section-title { color: var(--paper); }
+
+  .price-box {
+    margin: 56px auto 0;
+    max-width: 520px;
+    border: 1px solid rgba(196,136,58,0.4);
+    padding: 56px 48px;
+    position: relative;
+  }
+
+  .price-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ochre);
+    color: var(--charcoal);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    white-space: nowrap;
+  }
+
+  .price-label {
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    margin-bottom: 8px;
+  }
+
+  .price-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--paper);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .price-amount span {
+    font-size: 28px;
+    vertical-align: super;
+    font-weight: 400;
+  }
+
+  .price-period {
+    font-size: 13px;
+    color: rgba(245,240,232,0.4);
+    margin-bottom: 40px;
+  }
+
+  .price-includes {
+    list-style: none;
+    margin-bottom: 40px;
+    display: grid;
+    gap: 12px;
+    text-align: left;
+  }
+
+  .price-includes li {
+    font-size: 14px;
+    color: rgba(245,240,232,0.75);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .price-includes li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--ochre);
+    flex-shrink: 0;
+    border-radius: 50%;
+  }
+
+  .price-guarantee {
+    margin-top: 32px;
+    font-size: 13px;
+    color: rgba(245,240,232,0.4);
+    border-top: 1px solid rgba(196,136,58,0.2);
+    padding-top: 24px;
+  }
+
+  /* FAQ */
+  .faq-section { background: var(--paper); }
+
+  .faq-list { margin-top: 48px; display: grid; gap: 2px; }
+
+  .faq-item {
+    border-left: 3px solid transparent;
+    background: var(--cream);
+    padding: 28px 32px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .faq-item:hover, .faq-item.open {
+    border-left-color: var(--ochre);
+    background: var(--paper);
+  }
+
+  .faq-question {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--charcoal);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .faq-toggle {
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--ochre);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ochre);
+    font-size: 18px;
+    transition: transform 0.3s;
+  }
+
+  .faq-item.open .faq-toggle { transform: rotate(45deg); }
+
+  .faq-answer {
+    display: none;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #6a6460;
+    margin-top: 16px;
+  }
+
+  .faq-item.open .faq-answer { display: block; }
+
+  /* FINAL CTA */
+  .final-cta {
+    background: linear-gradient(135deg, var(--rust) 0%, #6b2810 100%);
+    text-align: center;
+    padding: 100px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  .final-cta-content { position: relative; max-width: 680px; margin: 0 auto; }
+
+  .final-cta .section-label { color: rgba(245,240,232,0.6); }
+
+  .final-cta .section-title {
+    color: var(--paper);
+    font-size: clamp(36px, 6vw, 64px);
+    margin-bottom: 20px;
+  }
+
+  .final-cta p {
+    font-size: 17px;
+    color: rgba(245,240,232,0.75);
+    margin-bottom: 48px;
+    line-height: 1.7;
+  }
+
+  .btn-light {
+    display: inline-block;
+    background: var(--paper);
+    color: var(--charcoal);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 22px 64px;
+    transition: all 0.3s ease;
+  }
+  .btn-light:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    text-align: center;
+    padding: 40px 24px;
+    font-size: 12px;
+    color: rgba(245,240,232,0.25);
+    letter-spacing: 1px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .includes-grid { grid-template-columns: 1fr; }
+    .price-box { padding: 48px 28px; }
+    .price-amount { font-size: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-border"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Uma comunidade de arte para quem leva o traço a sério</p>
+    <h1 class="hero-title">Sociedade dos<br><em>Fundamentos</em></h1>
+    <p class="hero-subtitle">Aprenda a desenhar e pintar do zero ao avançado — com aulas ao vivo, suporte em comunidade e técnicas que realmente funcionam.</p>
+    <div class="hero-cta">
+      <a href="#preco" class="btn-primary">Quero fazer parte</a>
+      <p class="hero-price-note">Acesso anual · R$ 297 · Cancele quando quiser</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem-section">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Você se identifica?</span>
+      <h2 class="section-title">A maioria das pessoas desiste<br>antes de criar algo <em>de verdade</em></h2>
+      <p class="section-body">Não é falta de talento. É falta de direção. É estudar sozinho, sem método, sem feedback — e sem ninguém ao lado pra te dizer onde você está errando.</p>
+    </div>
+
+    <ul class="problem-list reveal">
+      <li>Você começa um curso, mas perde o ritmo em duas semanas e abandona</li>
+      <li>Olha para os próprios desenhos e acha que "não tem jeito" — mas nunca teve quem te ensinasse o básico de verdade</li>
+      <li>Não sabe por onde começar: lápis, grafite, aquarela, óleo? Tudo parece complicado demais</li>
+      <li>Falta comunidade. Você evolui muito mais quando tem pessoas aprendendo junto</li>
+      <li>Cursos avulsos são caros e, muitas vezes, não entregam acompanhamento real</li>
+    </ul>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider reveal">
+  <div class="divider-line"></div>
+  <span class="divider-icon">✦</span>
+  <div class="divider-line"></div>
+</div>
+
+<!-- WHAT IS -->
+<section class="what-is">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">A solução</span>
+      <h2 class="section-title">Uma sociedade onde<br>a arte tem <em>fundamento</em></h2>
+      <p class="section-body">A Sociedade dos Fundamentos é uma comunidade de aprendizado contínuo para artistas de todos os níveis. Aqui você não recebe apenas aulas — você recebe um ambiente completo para evoluir, semana após semana, com método, comunidade e ao vivo.</p>
+    </div>
+
+    <div class="highlight-box reveal">
+      <p class="highlight-quote">"Fundamento não é limitação — é a base que liberta o artista para criar o que quiser, com o traço que quiser."</p>
+    </div>
+  </div>
+</section>
+
+<!-- INCLUDES -->
+<section style="background: var(--paper); padding: 80px 24px;">
+  <div class="container-wide">
+    <div class="reveal" style="text-align: center; margin-bottom: 0;">
+      <span class="section-label">O que está incluído</span>
+      <h2 class="section-title">Tudo que você precisa<br>para <em>nunca parar de evoluir</em></h2>
+    </div>
+
+    <div class="includes-grid">
+      <div class="include-card reveal">
+        <div class="include-number">01</div>
+        <div class="include-title">Aulas de Desenho</div>
+        <p class="include-desc">Do traço básico à composição completa. Proporcão, perspectiva, luz e sombra — os fundamentos que fazem qualquer artista avançar de verdade.</p>
+        <span class="include-tag">Gravado</span>
+      </div>
+
+      <div class="include-card reveal">
+        <div class="include-number">02</div>
+        <div class="include-title">Pintura a Lápis</div>
+        <p class="include-desc">Técnicas de grafite e lápis colorido para criar obras com profundidade, textura e riqueza de detalhes que impressionam.</p>
+        <span class="include-tag">Gravado</span>
+      </div>
+
+      <div class="include-card reveal">
+        <div class="include-number">03</div>
+        <div class="include-title">Pintura a Óleo</div>
+        <p class="include-desc">A técnica clássica dos grandes mestres. Aprenda a misturar, aplicar camadas e criar obras com a profundidade característica do óleo.</p>
+        <span class="include-tag">Gravado</span>
+      </div>
+
+      <div class="include-card reveal">
+        <div class="include-number">04</div>
+        <div class="include-title">Acrílica & Guache</div>
+        <p class="include-desc">Versatilidade total: acrílica para quem quer secagem rápida e vibrância de cor; guache para opacidade e acabamento impecável.</p>
+        <span class="include-tag">Gravado</span>
+      </div>
+
+      <div class="include-card reveal">
+        <div class="include-number">05</div>
+        <div class="include-title">Aulas ao Vivo</div>
+        <p class="include-desc">Encontros periódicos ao vivo com o professor — tire dúvidas em tempo real, receba feedback da sua obra e aprenda junto com a comunidade.</p>
+        <span class="include-tag">Ao vivo</span>
+      </div>
+
+      <div class="include-card reveal">
+        <div class="include-number">06</div>
+        <div class="include-title">Grupos de WhatsApp</div>
+        <p class="include-desc">Comunidade ativa para trocar obras, tirar dúvidas rápidas, receber inspiração diária e se manter cercado de pessoas que amam arte tanto quanto você.</p>
+        <span class="include-tag">Comunidade</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHO -->
+<section class="for-who">
+  <div class="container">
+    <div class="reveal" style="text-align: center;">
+      <span class="section-label">Esta comunidade é para você?</span>
+      <h2 class="section-title">Feita para quem<br>quer <em>de verdade</em></h2>
+    </div>
+
+    <div class="who-grid">
+      <div class="who-card yes reveal">
+        <p class="who-label">✓ Sim, é para você se...</p>
+        <ul class="who-list">
+          <li>É iniciante e quer aprender com método</li>
+          <li>Já desenha, mas quer ir além</li>
+          <li>Quer explorar diferentes técnicas e materiais</li>
+          <li>Valoriza comunidade e aprendizado coletivo</li>
+          <li>Quer acompanhamento e feedback real</li>
+          <li>Sonha em criar obras que te deixam orgulhoso</li>
+        </ul>
+      </div>
+
+      <div class="who-card no reveal">
+        <p class="who-label">✗ Não é para você se...</p>
+        <ul class="who-list">
+          <li>Busca resultado sem praticar</li>
+          <li>Não quer receber feedback ou crítica construtiva</li>
+          <li>Quer apenas "assistir" sem participar da comunidade</li>
+          <li>Não tem disposição para dedicar tempo à prática</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICE -->
+<section class="price-section" id="preco">
+  <div class="container">
+    <div class="reveal" style="text-align: center;">
+      <span class="section-label">Investimento</span>
+      <h2 class="section-title">Um ano inteiro de evolução<br>por menos de <em>R$ 1 por dia</em></h2>
+    </div>
+
+    <div class="price-box reveal">
+      <div class="price-badge">Acesso Anual</div>
+
+      <p class="price-label">Valor total por 12 meses</p>
+      <p class="price-amount"><span>R$</span> 297</p>
+      <p class="price-period">Pagamento único anual · Menos de R$ 0,82 por dia</p>
+
+      <ul class="price-includes">
+        <li>Aulas gravadas de desenho, lápis, óleo, acrílica e guache</li>
+        <li>Aulas ao vivo periódicas com o professor</li>
+        <li>Acesso aos grupos de WhatsApp da comunidade</li>
+        <li>Feedback e acompanhamento de evolução</li>
+        <li>Novos conteúdos adicionados ao longo do ano</li>
+        <li>Acesso imediato após a confirmação do pagamento</li>
+      </ul>
+
+      <a href="#" class="btn-primary" style="width: 100%; text-align: center; display: block;">Entrar agora por R$ 297</a>
+
+      <p class="price-guarantee">🔒 Pagamento seguro · Acesso liberado na hora</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="reveal" style="text-align: center;">
+      <span class="section-label">Dúvidas</span>
+      <h2 class="section-title">Perguntas <em>frequentes</em></h2>
+    </div>
+
+    <div class="faq-list reveal">
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Preciso ter experiência prévia em desenho ou pintura?
+          <div class="faq-toggle">+</div>
+        </div>
+        <p class="faq-answer">Não. A Sociedade dos Fundamentos foi criada para todos os níveis. Se você nunca pegou um lápis de cor na vida ou se já tem anos de prática, você vai encontrar conteúdo adequado para o seu momento.</p>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Como funcionam as aulas ao vivo?
+          <div class="faq-toggle">+</div>
+        </div>
+        <p class="faq-answer">As aulas ao vivo acontecem periodicamente com data e horário divulgados com antecedência na comunidade. Você pode tirar dúvidas em tempo real, mostrar suas obras e receber feedback direto do professor. Quem não conseguir participar ao vivo terá acesso à gravação.</p>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Quais materiais eu preciso ter?
+          <div class="faq-toggle">+</div>
+        </div>
+        <p class="faq-answer">Você não precisa ter tudo de uma vez. As aulas indicam os materiais necessários para cada técnica, e o professor orienta opções acessíveis para quem está começando. Você pode iniciar apenas com lápis e papel.</p>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Por quanto tempo tenho acesso ao conteúdo?
+          <div class="faq-toggle">+</div>
+        </div>
+        <p class="faq-answer">O acesso é anual. Isso significa 12 meses completos de aulas gravadas, aulas ao vivo e participação na comunidade. Ao final do período, você pode renovar para continuar evoluindo.</p>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Tem suporte se eu travar em alguma técnica?
+          <div class="faq-toggle">+</div>
+        </div>
+        <p class="faq-answer">Sim. O grupo de WhatsApp está ativo para dúvidas do dia a dia, e as aulas ao vivo são o espaço principal para feedback personalizado. Você não vai ficar preso sozinho em nenhuma etapa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="final-cta-content">
+    <span class="section-label">Última chamada</span>
+    <h2 class="section-title">Sua arte não pode<br>esperar mais um ano</h2>
+    <p>Cada semana que passa sem prática é uma semana a menos de evolução. Entre agora, comece hoje, e daqui a 12 meses você vai olhar para as suas obras e não acreditar no quanto avançou.</p>
+    <a href="#preco" class="btn-light">Quero entrar na Sociedade</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2024 Sociedade dos Fundamentos · Todos os direitos reservados</p>
+</footer>
+
+<script>
+  // FAQ toggle
+  function toggleFaq(el) {
+    el.classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
